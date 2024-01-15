@@ -1,0 +1,60 @@
+{% extends "components/base.html" %}
+{% block title%}Список товаров{% endblock title%}
+
+{% block main %}
+
+{% load mytags %}
+
+<div class="flex flex-col gap-y-5 mx-80 mt-48">
+    {% if categorie %}
+    <h3 class="mt-10  text-3xl font-bold leading-9 tracking-tight text-gray-900">{{categorie.title}}:</h3>
+    {% else %}
+    <h3 class="mt-10  text-3xl font-bold leading-9 tracking-tight text-gray-900">Найдено по вашему запросу:</h3>
+    {% endif %}
+        {% for i in items_ %}
+            <a  href = "{% url 'item_detail' i.category.slug i.id  %}" class="flex flex-col gap-y-12 bg-white border border-3 rounded border-slate-950 w-9/12 p-2"> 
+                <div class="flex justify-between pl-5 items-center">
+                    <span class="text-2xl text-gray-900 pr-5 font-bold">{{i.title}}</span>
+                    <span class=" text-xl text-green-500 font-semibold pl-2">{% beauty_number i.price %} RUB</span>
+                </div>
+                <span class= "text-l font-semibold pl-2 ">{{i.description}}</span>
+            </a>
+        {% endfor%}
+    <!-- <ul class="inline-flex -space-x-px text-sm mt-8 mb-14 ">
+        {% if item.has_previous %}
+            <li>
+                <a href="?page={{ item.previous_page_number }}" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-white-100 hover:text-gray-700 dark:bg-white-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-500 dark:hover:text-white ">Previous</a>
+            </li>
+        {% else %}
+            <li>
+                <a class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-white-100 hover:text-gray-700 dark:bg-white-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-500 dark:hover:text-white " disabled >Previous</a>
+            </li>
+        {%endif%}
+        
+        {% for page_num in item.paginator.page_range %}
+            {% if page_num == item.number %}
+                <li>
+                    <a class="flex items-center justify-center px-3 h-8 leading-tight text-black-900 bg-blue border border-gray-300 hover:bg-blue-900 hover:text-gray-700 dark:bg-blue-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-500 dark:hover:text-white"  >{{ page_num }}</a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="?page={{ page_num }}" class="flex items-center justify-center px-3 h-8 leading-tight text-black-900 bg-white border border-gray-300 hover:bg-grey-900 hover:text-gray-700 dark:bg-white-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-500 dark:hover:text-white">{{ page_num }}</a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if item.has_next %}
+        <li>
+            <a href="?page={{ item.next_page_number }}" class="flex items-center justify-center px-3 h-8  leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg  hover:bg-white-100 hover:text-gray-700 dark:bg-white-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-500 dark:hover:text-white">Next</a>
+        </li>
+        {% else %}
+        <li>
+            <a href="?page={{ item.paginator.num_pages }}" class="flex items-center justify-center px-3 h-8  leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg  hover:bg-white-100 hover:text-gray-700 dark:bg-white-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-500 dark:hover:text-white disabled">Next</a>
+                                                        
+        </li>
+        {% endif %}
+    </ul>
+</div> -->
+
+
+{% endblock main %} 

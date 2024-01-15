@@ -1,0 +1,71 @@
+{% extends "components/base.html" %}
+{% block title%}Список товаров{% endblock title%}
+{% load mytags %}
+{% block main %}
+
+<div class="flex flex-col gap-y-20 m-32 mt-48">
+    <div class="flex flex-col items-center gap-y-10">
+        <span class="text-4xl text-gray-900 font-bold">{{item.title}}</span>
+    </div>
+    <div class="flex gap-y-12  justify-around bg-white rounded w-full p-2"> 
+        <div class="flex flex-col gap-y-3">
+            <span class="text-2xl text-gray-900 font-semibold">Цена: </span>
+            <span class=" text-2xl text-green-500  ">{% beauty_number item.price %} RUB</span>
+        </div>
+        <div class="flex flex-col gap-y-3">
+            <span class="text-2xl text-gray-900 font-semibold">Категория: </span>
+            <span class=" text-2xl text-gray-900  ">{{item.category.title }}</span>
+        </div>
+        <div class="flex flex-col gap-y-3 w-56">
+            <span class= "text-2xl text-gray-900 font-semibold ">Описание</span>
+            <span class= "text-l text-gray-950 ">{{item.description}}</span>
+        </div>
+        
+    </div>
+<hr>
+<div class="flex gap-x-10 ">
+    {% load static %}
+    <div class="flex gap-x-10 border border-3 border-gray-950 rounded-xl p-2">
+        <a href="{% url 'like_or_nolike' item.category.slug item.id  '1' %}" >
+        {% if is_like == 1 %}
+        <img class="h-10 w-auto" src="{% static 'images/up_gray.png' %}" alt=""></a>
+        {% else %}
+        <img class="h-10 w-auto" src="{% static 'images/up.png' %}" alt=""></a>
+        {% endif %}
+        <span class=" text-2xl text-green-500  ">{{like}}</span>
+        
+    </div>
+    <div class="flex gap-x-10 border border-3 border-gray-950 rounded-xl p-2">
+        <a href="{% url 'like_or_nolike' item.category.slug item.id '-1' %}" >
+            {% if is_like == -1 %}
+            <img class="h-10 w-auto" src="{% static 'images/down_gray.png' %}" alt=""></a>
+            {% else %}
+            <img class="h-10 w-auto" src="{% static 'images/down.png' %}" alt=""></a>
+            {% endif %}
+        <span class=" text-2xl text-red-500  ">{{no_like}}</span>
+    </div>
+    
+</div>
+    
+
+    <div class="flex flex-col gap-y-12 bg-white rounded w-6/12  mb-14 p-2"> 
+        <span class="text-4xl text-gray-900 font-bold">Комментарии: </span>
+        <form class="flex flex-col gap-y-5" method="POST" action="{% url 'new_comment' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input name="article" type="hidden" value="{{ item.id }}"/>
+            <input name="categorie" type="hidden" value="{{ item.category.slug }}"/>
+            <textarea name="new_comment" id="" cols="30" rows="10"placeholder="Ваш комментарий" class="border p-3 border-3 rounded-lg border-gray-950 w-96 h-24 resize-none" required></textarea>
+            <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold py-0.5 px-3 rounded w-52 h-9">Отправить</button>
+        </form>
+        {% for comment in comments %}
+            <div class="flex flex-col">
+                <span class="text-gray-900 font-bold ">{{comment.author}}:</span>
+                <span class="text-gray-900 pl-3">{{comment.text}}</span>
+            </div>
+        {% empty %}
+            <span class="text-gray-900 font-bold ">Ни одного комментария не найдено</span>
+        {% endfor %}
+    </div>
+</div>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+{% endblock main %} 
