@@ -119,13 +119,13 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = Path(BASE_DIR / "staticroot")  # центральная папка для сбора статики
 STATICFILES_DIRS = [  # массив, с папками, откуда Django "собирает" статику
-    Path(BASE_DIR / "static/media"),
+    Path(BASE_DIR / "static/"),
     # Path(BASE_DIR / "react/build/static"),
     # Path(BASE_DIR / "static")
 ]
 
 # TODO UPLOAD
-MEDIA_URL = "/media/"  # /static/media/
+MEDIA_URL = "/media/"
 MEDIA_ROOT = Path(BASE_DIR / "static/media")
 
 

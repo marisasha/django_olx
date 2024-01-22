@@ -5,3 +5,4 @@ from django_app import models
 admin.site.register(models.Item)
 admin.site.register(models.CategoryItem)
 admin.site.register(models.CommentItem)
+admin.site.register(models.Room)

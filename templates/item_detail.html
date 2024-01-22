@@ -3,6 +3,9 @@
 {% load mytags %}
 {% block main %}
 
+
+
+
 <div class="flex flex-col gap-y-20 m-32 mt-48">
     <div class="flex flex-col items-center gap-y-10">
         <span class="text-4xl text-gray-900 font-bold">{{item.title}}</span>
@@ -23,14 +26,15 @@
         
     </div>
 <hr>
+
 <div class="flex gap-x-10 ">
     {% load static %}
     <div class="flex gap-x-10 border border-3 border-gray-950 rounded-xl p-2">
         <a href="{% url 'like_or_nolike' item.category.slug item.id  '1' %}" >
         {% if is_like == 1 %}
-        <img class="h-10 w-auto" src="{% static 'images/up_gray.png' %}" alt=""></a>
+        <img class="h-10 w-auto" src="{% static 'image/up_gray.png' %}" alt=""></a>
         {% else %}
-        <img class="h-10 w-auto" src="{% static 'images/up.png' %}" alt=""></a>
+        <img class="h-10 w-auto" src="{% static 'image/up.png' %}" alt=""></a>
         {% endif %}
         <span class=" text-2xl text-green-500  ">{{like}}</span>
         
@@ -38,9 +42,9 @@
     <div class="flex gap-x-10 border border-3 border-gray-950 rounded-xl p-2">
         <a href="{% url 'like_or_nolike' item.category.slug item.id '-1' %}" >
             {% if is_like == -1 %}
-            <img class="h-10 w-auto" src="{% static 'images/down_gray.png' %}" alt=""></a>
+            <img class="h-10 w-auto" src="{% static 'image/down_gray.png' %}" alt=""></a>
             {% else %}
-            <img class="h-10 w-auto" src="{% static 'images/down.png' %}" alt=""></a>
+            <img class="h-10 w-auto" src="{% static 'image/down.png' %}" alt=""></a>
             {% endif %}
         <span class=" text-2xl text-red-500  ">{{no_like}}</span>
     </div>
@@ -68,4 +72,5 @@
     </div>
 </div>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
 {% endblock main %} 

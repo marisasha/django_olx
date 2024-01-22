@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.core.validators import FileExtensionValidator
 
 
+
+
 class CategoryItem(models.Model):
     title = models.CharField(
         verbose_name="Наименование",
@@ -16,7 +18,7 @@ class CategoryItem(models.Model):
         default="",
         max_length=300,
     )
-    image = models.ImageField(
+    images = models.ImageField(
         verbose_name="Картинка",
         validators=[FileExtensionValidator(["jpg", "png", "jpeg", "bmp"])],
         unique=False,
@@ -24,7 +26,7 @@ class CategoryItem(models.Model):
         blank=True,
         null=True,
         default=None,
-        upload_to="images",
+        upload_to="models/images",
     )
     slug = models.SlugField(  
         verbose_name="Ссылка",
@@ -49,6 +51,7 @@ class CategoryItem(models.Model):
     
 
 class Item(models.Model):
+    
     title = models.CharField(
         verbose_name="Наименование",
         db_index=True,
@@ -108,10 +111,17 @@ class Item(models.Model):
     #     to=TagItem,
     # )
     is_active = models.BooleanField(
-        verbose_name="Активеность объявления",
+        verbose_name="Активность объявления",
         null=False,
         default=True,
     )
+    author = models.ForeignKey(
+        verbose_name="Автор",
+        to=User,
+        null=False,
+        max_length=100,
+        on_delete=models.CASCADE,
+)
 
     class Meta:
         app_label = "django_app"
@@ -126,6 +136,15 @@ class Item(models.Model):
             act = "продано"
         return f"<Item {self.title}({self.id}) | {act} | {self.description[:20]} />"
     
+
+    def total_rating(self):
+        item = Item.objects.get(id = self.id)
+        _total_rating = ItemLike.objects.filter(item=item, is_like=True).count() - ItemLike.objects.filter(item=item,is_like=False).count()
+        return _total_rating
+
+
+
+
     def is_my_rating_selection(self, user: User) -> int:
         _item = Item.objects.get(id=self.id)
         _ratings = ItemLike.objects.all().filter(item=_item)
@@ -245,3 +264,41 @@ class ItemLike(models.Model):
     def __str__(self):
         return f"<ItemRating {self.item.title}({self.is_like})/>"
     
+
+class Room(models.Model):
+    name = models.CharField(
+        verbose_name="Наименование",
+        db_index=True,
+        primary_key=False,
+        unique=False,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+        max_length=255,
+    )
+    slug = models.SlugField(
+        verbose_name="Ссылка",
+        db_index=True,
+        primary_key=False,
+        unique=True,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+        max_length=300,
+    )
+    users = models.ManyToManyField(
+        verbose_name="Участники чата",
+        max_length=50,
+        to = User
+    )
+
+    class Meta:
+        app_label = "django_app"
+        ordering = ("name",)
+        verbose_name = "Группа"
+        verbose_name_plural = "Группы"
+
+    def __str__(self):
+        return f"<Group {self.name}({self.id}) />"

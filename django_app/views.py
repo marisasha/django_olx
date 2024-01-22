@@ -74,22 +74,21 @@ def items(request,slug):
 
 
 def item_detail(request,slug,pk):
-    print(slug)
     item = models.Item.objects.get(id=pk)
-    categorie = models.CategoryItem.objects.get(slug=slug)
     comments = models.CommentItem.objects.all().filter(article = item)
     like = models.ItemLike.objects.all().filter(item=item,is_like=True).count()
     no_like = models.ItemLike.objects.all().filter(item=item,is_like=False).count()
+    room_users = models.Room.objects.all().filter(id=1)
     return render(
                         request=request,
                         template_name="item_detail.html",
                         context={
                                 "item":item,
-                                "categorie":categorie,
                                 "comments":comments,
                                 "like":like,
                                 "no_like":no_like,
-                                "is_like":item.is_my_rating_selection(request.user)
+                                "is_like":item.is_my_rating_selection(request.user),
+                                "room_users":room_users
                                 }
         )
 
@@ -123,3 +122,20 @@ def like_or_nolike(request,slug,item_id,is_like):
         like_obj = models.ItemLike.objects.create(author=author, item=_item, is_like=_is_like)
 
     return redirect(reverse("item_detail", args=(slug,item_id,)))
+
+
+def rating(request):
+    _items = models.Item.objects.filter(is_active=True)
+    sort = request.GET.get('sort',"desc")
+    match sort:
+        case "asc":
+            _items = sorted(_items, key=lambda x: (x.total_rating(), x.title), reverse=False)
+        case "desc":
+            _items = sorted(_items, key=lambda x: (x.total_rating(), x.title), reverse=True)
+        case _:
+            _items = sorted(_items, key=lambda x: (x.total_rating(), x.title), reverse=True)
+    return render(
+                        request=request,
+                        template_name="rating.html",
+                        context={"items":_items,"sort":sort}
+        )

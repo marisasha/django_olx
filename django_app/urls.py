@@ -13,5 +13,6 @@ urlpatterns = [
 
     path('',views.main_page,name = 'main_page'),
     path('items/<str:slug>',views.items,name='items'),
-    path('items/<str:slug>/<str:pk>',views.item_detail,name='item_detail')
+    path('items/<str:slug>/<str:pk>',views.item_detail,name='item_detail'),
+    path('rating',views.rating,name='rating'),
 ]
