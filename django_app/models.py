@@ -2,6 +2,49 @@ from django.contrib.auth.models import User
 from django.db import models 
 from django.utils import timezone
 from django.core.validators import FileExtensionValidator
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(
+        verbose_name="Автор",
+        db_index=True,
+        primary_key=False,
+        editable=True,
+        blank=True,
+        null=True,
+        default=None,
+        max_length=300,
+        #
+        to=User,
+        on_delete=models.CASCADE,
+        related_name="profile",
+    )
+    avatar = models.ImageField(
+        verbose_name="Аватарка",
+        validators=[FileExtensionValidator(["jpg", "png", "jpeg"])],
+        unique=False,
+        editable=True,
+        blank=True,
+        null=True,
+        default=None,
+        upload_to="images",
+    )
+
+    class Meta:
+        app_label = "auth"
+        ordering = ("-user",)
+
+    def __str__(self):
+        return f"<Profile {self.user.username} ({self.id})/>"
+
+
+
+@receiver(post_save, sender=User)
+def profile_create(sender, instance: User, created: bool, **kwargs):
+    # взять или создать
+    profile = Profile.objects.get_or_create(user=instance)
 
 
 
