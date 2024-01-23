@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
+    "channels",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -69,6 +71,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'django_settings.wsgi.application'
+ASGI_APPLICATION = "django_settings.asgi.application"
+
+
+CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
 
 
 # Database
@@ -119,7 +125,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = Path(BASE_DIR / "staticroot")  # центральная папка для сбора статики
 STATICFILES_DIRS = [  # массив, с папками, откуда Django "собирает" статику
-    Path(BASE_DIR / "static/"),
+    Path(BASE_DIR / "static/media"),
     # Path(BASE_DIR / "react/build/static"),
     # Path(BASE_DIR / "static")
 ]

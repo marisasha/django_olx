@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -139,3 +140,33 @@ def rating(request):
                         template_name="rating.html",
                         context={"items":_items,"sort":sort}
         )
+
+def rooms(request):
+    user = request.user
+    _rooms = models.Room.objects.filter(users=user)
+    print(_rooms)
+    return render(
+                        request=request,
+                        template_name="rooms.html",
+                        context={"rooms":_rooms}
+        )
+
+def room(request,item_author_id):
+    now_user = request.user
+    try:
+        _room = models.Room.objects.filter(users=now_user).filter(users=item_author_id).first()
+        return chat(request,_room.slug)
+    except Exception:
+        _room = models.Room.objects.create(
+            name = 'userchat',
+        )
+        _room.slug = f'userchat{_room.id}'
+        _room.users.add(item_author_id,now_user)
+        _room.save()
+        print(_room.users)
+        return chat(request,_room.slug)
+
+def chat(request,room_slug):
+    _room = models.Room.objects.get(slug=room_slug)
+    _messages = models.Message.objects.filter(room=_room)[:30][::-1]
+    return render(request, "chat.html", context={"room": _room, "messages": _messages})

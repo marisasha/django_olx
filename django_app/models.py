@@ -302,3 +302,60 @@ class Room(models.Model):
 
     def __str__(self):
         return f"<Group {self.name}({self.id}) />"
+    
+
+class Message(models.Model):
+    user = models.ForeignKey(
+        verbose_name="Автор",
+        db_index=True,
+        primary_key=False,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+        max_length=100,
+        #
+        to=User,
+        on_delete=models.CASCADE,
+    )
+    room = models.ForeignKey(
+        verbose_name="Комната",
+        db_index=True,
+        primary_key=False,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+        max_length=100,
+        #
+        to=Room,
+        on_delete=models.CASCADE,
+    )
+    content = models.TextField(
+        verbose_name="Текст сообщения",
+        db_index=False,
+        primary_key=False,
+        unique=False,
+        editable=True,
+        blank=True,
+        null=False,
+        default="",
+    )
+    date_added = models.DateTimeField(
+        verbose_name="дата и время добавления",
+        db_index=True,
+        primary_key=False,
+        unique=False,
+        editable=True,
+        blank=True,
+        null=False,
+        default=timezone.now,
+        max_length=300,
+    )
+
+    class Meta:
+        app_label = "django_app"
+        ordering = ("-date_added", "-room")
+
+    def __str__(self):
+        return f"<Message {self.room.name} {self.user.username} {self.content[:30]} ({self.id})/>"
