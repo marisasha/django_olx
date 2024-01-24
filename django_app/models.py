@@ -69,7 +69,7 @@ class CategoryItem(models.Model):
         blank=True,
         null=True,
         default=None,
-        upload_to="models/images",
+        upload_to="media/images",
     )
     slug = models.SlugField(  
         verbose_name="Ссылка",

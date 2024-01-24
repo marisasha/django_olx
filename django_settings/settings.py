@@ -112,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -123,16 +123,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = Path(BASE_DIR / "staticroot")  # центральная папка для сбора статики
+STATIC_ROOT = Path(BASE_DIR / "static/")  # центральная папка для сбора статики
 STATICFILES_DIRS = [  # массив, с папками, откуда Django "собирает" статику
     Path(BASE_DIR / "static/media"),
     # Path(BASE_DIR / "react/build/static"),
     # Path(BASE_DIR / "static")
 ]
 
-# TODO UPLOAD
-MEDIA_URL = "/media/"
-MEDIA_ROOT = Path(BASE_DIR / "static/media")
+# # TODO UPLOAD
+# MEDIA_URL = "/media/"
+# MEDIA_ROOT = Path(BASE_DIR / "static/media")
 
 
 # Default primary key field type
